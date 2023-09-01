@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { ImageGallery } from './ImageGallery';
 import { Searchbar } from './Searchbar';
 import { getImages } from '../helpers/imageApi';
@@ -6,43 +6,42 @@ import { Button } from './Button';
 import { Modal } from './Modal';
 import { Loader } from './Loader';
 
-export class App extends Component {
-  state = {
-    images: [],
-    searchValue: '',
-    isError: false,
-    isLoader: false,
-    page: 1,
-    isModalOpen: false,
-    modalImage: null,
-    isShowBtn: false,
+export const App = () => {
+  const [image, setImage] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [isError, setIsError] = useState(false);
+  const [isLoader, setIsLoader] = useState(false);
+  const [page, setPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
+  const [isShowBtn, setShowBtn] = useState(false);
+
+
+  const handelOpenModal = imageBig => {
+    setIsModalOpen(true);
+    setModalImage(imageBig)
   };
 
-  handelOpenModal = imageBig => {
-    this.setState({ isModalOpen: true, modalImage: imageBig });
-  };
-  handelCloseModal = () => {
-    this.setState({ isModalOpen: false });
+  const handelCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   handelPageUpdate = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+    setPage((prevPage) => prevPage + 1);
   };
 
-  handleSearchValue = searchValue => {
-    this.setState({
-      searchValue,
-      page: 1,
-      images: [],
-      isError: false,
-      isLoader: false,
-      isModalOpen: false,
-      modalImage: null,
-      isShowBtn: false,
-    });
+  const handleSearchValue = setSearchValue => {
+      setSearchValue(value),
+      setPage(1),
+      setImages([]),
+      setIsError(false),
+      setIsLoader(false),
+      setIsModalOpen(false),
+      setModalImage(null),
+      setIsShowBtn(false),
   };
 
-  async componentDidUpdate(_, prevState) {
+   useEffect =>(_, prevState) {
     if (
       prevState.searchValue !== this.state.searchValue ||
       prevState.page !== this.state.page
@@ -68,8 +67,7 @@ export class App extends Component {
     }
   }
 
-  render() {
-    const { images, isLoader, isModalOpen, modalImage, isShowBtn } = this.state;
+
     return (
       <div className="App">
         <Searchbar onChangeSearch={this.handleSearchValue} />
@@ -85,4 +83,4 @@ export class App extends Component {
       </div>
     );
   }
-}
+
