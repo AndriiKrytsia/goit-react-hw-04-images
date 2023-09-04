@@ -68,6 +68,7 @@ export const App = () => {
       {isModalOpen && (
         <Modal modalImageBig={modalImage} handelCloseModal={handleCloseModal} />
       )}
+      {isError && <p>Error</p>}
       {isShowBtn && <Button onClickLoadMore={handlePageUpdate} />}
       {isLoader && <Loader />}
     </div>
