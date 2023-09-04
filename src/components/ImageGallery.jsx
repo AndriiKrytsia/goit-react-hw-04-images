@@ -1,10 +1,9 @@
-import { Component } from 'react';
 import { ImageGalleryItem } from './ImageGalleryItem';
 
-export const ImageGallery = ({ onModalClick }) => {
+export const ImageGallery = ({ onModalClick, imageArr }) => {
   return (
     <ul className="ImageGallery">
-      {this.props.imageArr.map(image => (
+      {imageArr.map(image => (
         <ImageGalleryItem
           onModalClick={onModalClick}
           key={image.id}

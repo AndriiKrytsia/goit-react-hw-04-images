@@ -14,73 +14,62 @@ export const App = () => {
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState(null);
-  const [isShowBtn, setShowBtn] = useState(false);
+  const [isShowBtn, setIsShowBtn] = useState(false);
 
-
-  const handelOpenModal = imageBig => {
+  const handleOpenModal = imageBig => {
     setIsModalOpen(true);
-    setModalImage(imageBig)
+    setModalImage(imageBig);
   };
 
-  const handelCloseModal = () => {
+  const handleCloseModal = () => {
     setIsModalOpen(false);
   };
 
-  handelPageUpdate = () => {
-    setPage((prevPage) => prevPage + 1);
+  const handlePageUpdate = () => {
+    setPage(prevPage => prevPage + 1);
   };
 
-  const handleSearchValue = setSearchValue => {
-      setSearchValue(value),
-      setPage(1),
-      setImages([]),
-      setIsError(false),
-      setIsLoader(false),
-      setIsModalOpen(false),
-      setModalImage(null),
-      setIsShowBtn(false),
+  const handleSearchValue = value => {
+    setSearchValue(value);
+    setPage(1);
+    setImage([]);
+    setIsError(false);
+    setIsLoader(false);
+    setIsModalOpen(false);
+    setModalImage(null);
+    setIsShowBtn(false);
   };
 
-   useEffect =>(_, prevState) {
-    if (
-      prevState.searchValue !== this.state.searchValue ||
-      prevState.page !== this.state.page
-    ) {
-      try {
-        this.setState({ isLoader: true });
-        const responImages = await getImages(
-          this.state.searchValue,
-          this.state.page
-        );
-        if (responImages.totalHits === 0) {
+  useEffect(() => {
+    if (!searchValue) return;
+    try {
+      setIsLoader(true);
+      async function resImages() {
+        const responseImages = await getImages(searchValue, page);
+
+        if (responseImages.totalHits === 0) {
           return alert('Try now!!!');
         }
-        this.setState(prevState => ({
-          images: [...prevState.images, ...responImages.hits],
-          isShowBtn: Math.ceil(responImages.totalHits / 12) > this.state.page,
-        }));
-      } catch (error) {
-        this.setState({ isError: true });
-      } finally {
-        this.setState({ isLoader: false });
+        setImage([...image, ...responseImages.hits]);
+        setIsShowBtn(Math.ceil(responseImages.totalHits / 12) > page);
       }
+      resImages();
+    } catch (error) {
+      setIsError(true);
+    } finally {
+      setIsLoader(false);
     }
-  }
+  }, [searchValue, page]);
 
-
-    return (
-      <div className="App">
-        <Searchbar onChangeSearch={this.handleSearchValue} />
-        <ImageGallery imageArr={images} onModalClick={this.handelOpenModal} />
-        {isModalOpen && (
-          <Modal
-            modalImageBig={modalImage}
-            handelCloseModal={this.handelCloseModal}
-          />
-        )}
-        {isShowBtn && <Button onClickLoadMore={this.handelPageUpdate} />}
-        {isLoader && <Loader />}
-      </div>
-    );
-  }
-
+  return (
+    <div className="App">
+      <Searchbar onChangeSearch={handleSearchValue} />
+      <ImageGallery imageArr={image} onModalClick={handleOpenModal} />
+      {isModalOpen && (
+        <Modal modalImageBig={modalImage} handelCloseModal={handleCloseModal} />
+      )}
+      {isShowBtn && <Button onClickLoadMore={handlePageUpdate} />}
+      {isLoader && <Loader />}
+    </div>
+  );
+};

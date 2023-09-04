@@ -1,8 +1,5 @@
-import { Component } from 'react';
 
-export class ImageGalleryItem extends Component {
-  render() {
-    const { onModalClick, webformatURL, largeImageURL, tags } = this.props;
+export const ImageGalleryItem = ({ onModalClick, webformatURL, largeImageURL, tags }) => {
     return (
       <li
         className="ImageGalleryItem"
@@ -11,5 +8,4 @@ export class ImageGalleryItem extends Component {
         <img className="ImageGalleryItem-image" src={webformatURL} alt={tags} />
       </li>
     );
-  }
-}
+    }
