@@ -50,7 +50,7 @@ export const App = () => {
         if (responseImages.totalHits === 0) {
           return alert('Try now!!!');
         }
-        setImage([...image, ...responseImages.hits]);
+        setImage(prevImg => [...prevImg, ...responseImages.hits]);
         setIsShowBtn(Math.ceil(responseImages.totalHits / 12) > page);
       }
       resImages();
