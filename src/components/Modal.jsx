@@ -17,7 +17,7 @@ export const Modal = ({ handelCloseModal, modalImageBig }) => {
     return () => {
       document.removeEventListener('keydown', handleEscapeClose);
     };
-  });
+  }, [handelCloseModal]);
 
   return (
     <div onClick={handleBackdropClose} className="Overlay">
